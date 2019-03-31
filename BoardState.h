@@ -95,8 +95,10 @@ public:
     static const int LENGTH = 4;
     static const int HEIGHT = 4;
 
-    static const int SCORE_WEIGHT_WIN_DIRECTION_POSSIBLE = 10000;
-    static const int SCORE_WEIGHT_OPENING_CREATED = 100000;
+    static const int SCORE_WEIGHT_WIN_DIRECTION_POSSIBLE = 1000;
+    static const int SCORE_WEIGHT_PLAYABLE_OPENING_CREATED = 100000;
+    static const int SCORE_WEIGHT_FUTURE_OPENING_CREATED = 10000;
+
     static const int SCORE_WEIGHT_BLOCKED_WIN_DIRECTION_POSSIBLE = 100;
     static const int SCORE_WEIGHT_BLOCKED_OPENING_CREATED = 1000;
     static const int SCORE_WEIGHT_ABOVE_OPPONENT_WIN_DIRECTION_POSSIBLE = -100;

@@ -344,7 +344,6 @@ MoveOrdering BoardState::getMoves() {
         }
     }
 
-    //TODO update score and sort
     for (int i = 0; i < moves.moveCount; i++) {
         moves.moves[i].updatedPlayerOpenings = activePlayerOpenings;
         moves.moves[i].score = 0;
@@ -358,9 +357,17 @@ MoveOrdering BoardState::getMoves() {
                 // (note that we cannot have 3 stones there, otherwise this current stone would have won)
                 uint64_t currPotentialOpeningStones = activePlayerBoard & (openingUpdateMasks[currID].masks[j]);
                 if (((currPotentialOpeningStones - 1) & currPotentialOpeningStones) != 0) {
-                    moves.moves[i].score += SCORE_WEIGHT_OPENING_CREATED;
+                    uint64_t createdOpening = currPotentialOpeningStones ^ (openingUpdateMasks[currID].masks[j]);
+                    // Check whether the opening is immediately playable and add the corresponding weight
+                    // Note that the second check is necessary because playableMoves does not take the current move into account, which might enable the immediate opening move
+                    if ((createdOpening & playableMoves) != 0 || (((moves.moves[i].move) << 16) & createdOpening) != 0) {
+                        moves.moves[i].score += SCORE_WEIGHT_PLAYABLE_OPENING_CREATED;
+                    }
+                    else {
+                        moves.moves[i].score += SCORE_WEIGHT_FUTURE_OPENING_CREATED;
+                    }
                     // Get the actual opening and add it to the mask
-                    moves.moves[i].updatedPlayerOpenings |= currPotentialOpeningStones ^ (openingUpdateMasks[currID].masks[j]);
+                    moves.moves[i].updatedPlayerOpenings |= createdOpening;
                 }
             }
 
