@@ -16,6 +16,7 @@ int main() {
     std::cout << "Computation complete. Result is " << result << ". Computed in " << computationTime << " seconds using " << Game::iterationCount << " iterations." << std::endl;
     std::cout << "Time per iteration: " << timePerIteration << "      K pos/s: " << kPosPerS << std::endl;
     std::cout << "Of the " << Game::TABLESIZE << " possible table entries, " << Game::tableFillCount() << " were used in the end." << std::endl;
+    system("pause");
 #ifdef TERMINATE_AT_CERTAIN_DEPTH
     std::cout << "Game was terminated at depth " << static_cast<int>(Game::terminationDepth) << " " << Game::terminationCount << " times." << std::endl;
 #endif

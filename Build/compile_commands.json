@@ -1,0 +1,17 @@
+[
+{
+  "directory": "C:/Users/owen2/Documents/GitHub/Score4/connect_four_3d_solver/Build",
+  "command": "C:/Users/owen2/MinGW/bin/g++.exe    -pg -g -std=gnu++14 -o CMakeFiles/connect_four_3d_solver.dir/main.cpp.obj -c C:/Users/owen2/Documents/GitHub/Score4/connect_four_3d_solver/main.cpp",
+  "file": "C:/Users/owen2/Documents/GitHub/Score4/connect_four_3d_solver/main.cpp"
+},
+{
+  "directory": "C:/Users/owen2/Documents/GitHub/Score4/connect_four_3d_solver/Build",
+  "command": "C:/Users/owen2/MinGW/bin/g++.exe    -pg -g -std=gnu++14 -o CMakeFiles/connect_four_3d_solver.dir/Game.cpp.obj -c C:/Users/owen2/Documents/GitHub/Score4/connect_four_3d_solver/Game.cpp",
+  "file": "C:/Users/owen2/Documents/GitHub/Score4/connect_four_3d_solver/Game.cpp"
+},
+{
+  "directory": "C:/Users/owen2/Documents/GitHub/Score4/connect_four_3d_solver/Build",
+  "command": "C:/Users/owen2/MinGW/bin/g++.exe    -pg -g -std=gnu++14 -o CMakeFiles/connect_four_3d_solver.dir/BoardState.cpp.obj -c C:/Users/owen2/Documents/GitHub/Score4/connect_four_3d_solver/BoardState.cpp",
+  "file": "C:/Users/owen2/Documents/GitHub/Score4/connect_four_3d_solver/BoardState.cpp"
+}
+]

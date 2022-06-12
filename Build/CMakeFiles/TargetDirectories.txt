@@ -1,0 +1,3 @@
+C:/Users/owen2/Documents/GitHub/Score4/connect_four_3d_solver/Build/CMakeFiles/connect_four_3d_solver.dir
+C:/Users/owen2/Documents/GitHub/Score4/connect_four_3d_solver/Build/CMakeFiles/edit_cache.dir
+C:/Users/owen2/Documents/GitHub/Score4/connect_four_3d_solver/Build/CMakeFiles/rebuild_cache.dir
