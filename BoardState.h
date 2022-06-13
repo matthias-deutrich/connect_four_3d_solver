@@ -121,22 +121,19 @@ public:
     static uint16_t invertDiagonalULAxis(uint16_t board);
     static void initialize();
 
-    static uint64_t activePlayerBoardHistory[64];
-    static uint64_t opponentBoardHistory[64];
-    static uint64_t activePlayerOpeningsHistory[64];
-    static uint64_t opponentOpeningsHistory[64];
-    static uint64_t playableMovesHistory[64];
-    static uint8_t movesPlayedCount;
+    uint64_t activePlayerBoard;
+    uint64_t opponentBoard;
+    uint64_t activePlayerOpenings;
+    uint64_t opponentOpenings;
+    uint64_t playableMoves;
+    uint8_t movesPlayedCount;
 
     CompactBoardState symmetricBoards[8];
     CompactBoardState tableKey;
     bool symmetricBoardsInitialized;
 
     explicit BoardState(int* initialBoard);
-    // BoardState(BoardState &position, Move move);
-
-    void MakeMove(Move move);
-    void UndoMove();
+    BoardState(BoardState &position, Move move);
 
     bool canWin();
     bool willDrawUnlessWin();

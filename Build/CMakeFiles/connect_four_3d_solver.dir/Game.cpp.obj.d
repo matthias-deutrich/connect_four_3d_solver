@@ -1,11 +1,12 @@
 CMakeFiles/connect_four_3d_solver.dir/Game.cpp.obj: \
  C:/Users/owen2/Documents/GitHub/Score4/connect_four_3d_solver/Game.cpp \
- C:/Users/owen2/Documents/GitHub/Score4/connect_four_3d_solver/Game.h \
- C:/Users/owen2/Documents/GitHub/Score4/connect_four_3d_solver/BoardState.h \
- c:\users\owen2\mingw\include\c++\11.2.0\cstdint \
+ c:\users\owen2\mingw\include\c++\11.2.0\chrono \
+ c:\users\owen2\mingw\include\c++\11.2.0\ratio \
+ c:\users\owen2\mingw\include\c++\11.2.0\type_traits \
  c:\users\owen2\mingw\include\c++\11.2.0\x86_64-w64-mingw32\bits\c++config.h \
  c:\users\owen2\mingw\include\c++\11.2.0\x86_64-w64-mingw32\bits\os_defines.h \
  c:\users\owen2\mingw\include\c++\11.2.0\x86_64-w64-mingw32\bits\cpu_defines.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\cstdint \
  c:\users\owen2\mingw\lib\gcc\x86_64-w64-mingw32\11.2.0\include\stdint.h \
  c:\users\owen2\mingw\x86_64-w64-mingw32\include\stdint.h \
  c:\users\owen2\mingw\x86_64-w64-mingw32\include\crtdefs.h \
@@ -17,19 +18,28 @@ CMakeFiles/connect_four_3d_solver.dir/Game.cpp.obj: \
  c:\users\owen2\mingw\x86_64-w64-mingw32\include\sdks/_mingw_ddk.h \
  c:\users\owen2\mingw\lib\gcc\x86_64-w64-mingw32\11.2.0\include\stddef.h \
  c:\users\owen2\mingw\x86_64-w64-mingw32\include\stddef.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\limits \
+ c:\users\owen2\mingw\include\c++\11.2.0\ctime \
+ c:\users\owen2\mingw\x86_64-w64-mingw32\include\time.h \
+ c:\users\owen2\mingw\x86_64-w64-mingw32\include\_timeval.h \
+ c:\users\owen2\mingw\x86_64-w64-mingw32\include\sys\timeb.h \
+ c:\users\owen2\mingw\x86_64-w64-mingw32\include\sec_api\sys\timeb_s.h \
+ c:\users\owen2\mingw\x86_64-w64-mingw32\include\pthread_time.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\parse_numbers.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\ext\numeric_traits.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\cpp_type_traits.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\ext\type_traits.h \
+ C:/Users/owen2/Documents/GitHub/Score4/connect_four_3d_solver/Game.h \
+ C:/Users/owen2/Documents/GitHub/Score4/connect_four_3d_solver/BoardState.h \
  c:\users\owen2\mingw\include\c++\11.2.0\array \
  c:\users\owen2\mingw\include\c++\11.2.0\utility \
  c:\users\owen2\mingw\include\c++\11.2.0\bits\stl_relops.h \
  c:\users\owen2\mingw\include\c++\11.2.0\bits\stl_pair.h \
  c:\users\owen2\mingw\include\c++\11.2.0\bits\move.h \
- c:\users\owen2\mingw\include\c++\11.2.0\type_traits \
  c:\users\owen2\mingw\include\c++\11.2.0\initializer_list \
  c:\users\owen2\mingw\include\c++\11.2.0\bits\functexcept.h \
  c:\users\owen2\mingw\include\c++\11.2.0\bits\exception_defines.h \
  c:\users\owen2\mingw\include\c++\11.2.0\bits\stl_algobase.h \
- c:\users\owen2\mingw\include\c++\11.2.0\bits\cpp_type_traits.h \
- c:\users\owen2\mingw\include\c++\11.2.0\ext\type_traits.h \
- c:\users\owen2\mingw\include\c++\11.2.0\ext\numeric_traits.h \
  c:\users\owen2\mingw\include\c++\11.2.0\bits\stl_iterator_base_types.h \
  c:\users\owen2\mingw\include\c++\11.2.0\bits\stl_iterator_base_funcs.h \
  c:\users\owen2\mingw\include\c++\11.2.0\bits\concept_check.h \
@@ -84,11 +94,6 @@ CMakeFiles/connect_four_3d_solver.dir/Game.cpp.obj: \
  c:\users\owen2\mingw\x86_64-w64-mingw32\include\limits.h \
  c:\users\owen2\mingw\x86_64-w64-mingw32\include\signal.h \
  c:\users\owen2\mingw\x86_64-w64-mingw32\include\pthread_signal.h \
- c:\users\owen2\mingw\x86_64-w64-mingw32\include\time.h \
- c:\users\owen2\mingw\x86_64-w64-mingw32\include\_timeval.h \
- c:\users\owen2\mingw\x86_64-w64-mingw32\include\sys\timeb.h \
- c:\users\owen2\mingw\x86_64-w64-mingw32\include\sec_api\sys\timeb_s.h \
- c:\users\owen2\mingw\x86_64-w64-mingw32\include\pthread_time.h \
  c:\users\owen2\mingw\x86_64-w64-mingw32\include\pthread_compat.h \
  c:\users\owen2\mingw\x86_64-w64-mingw32\include\pthread_unistd.h \
  c:\users\owen2\mingw\include\c++\11.2.0\x86_64-w64-mingw32\bits\atomic_word.h \
@@ -108,5 +113,4 @@ CMakeFiles/connect_four_3d_solver.dir/Game.cpp.obj: \
  c:\users\owen2\mingw\include\c++\11.2.0\bits\charconv.h \
  c:\users\owen2\mingw\include\c++\11.2.0\bits\functional_hash.h \
  c:\users\owen2\mingw\include\c++\11.2.0\bits\hash_bytes.h \
- c:\users\owen2\mingw\include\c++\11.2.0\bits\basic_string.tcc \
- c:\users\owen2\mingw\include\c++\11.2.0\ctime
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\basic_string.tcc

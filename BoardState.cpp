@@ -3,8 +3,6 @@
 //
 
 #include "BoardState.h"
-// #include <iostream>
-// #include<bitset>
 
 WinMasks BoardState::openingUpdateMasks[64] = {};
 uint16_t BoardState::symmetryLookupTables[65536][7] = {};
@@ -34,13 +32,6 @@ uint64_t BoardState::shiftMasks[12] = {uint64_t(0b000100010001000100010001000100
                                        uint64_t(0b0000000000000000000000000000000000000000000000000001000000000000)};
 bool BoardState::staticInitializationComplete = false;
 
-uint64_t BoardState::activePlayerBoardHistory[64] = {};
-uint64_t BoardState::opponentBoardHistory[64] = {};
-uint64_t BoardState::activePlayerOpeningsHistory[64] {};
-uint64_t BoardState::opponentOpeningsHistory[64] = {};
-uint64_t BoardState::playableMovesHistory[64] = {};
-uint8_t BoardState::movesPlayedCount = 0;
-
 BoardState::BoardState(int *initialBoard) {
     //TODO assure this is a legal board: no draw, no wins, no floating pieces, number of moves for each player equal or different by one
     uint64_t board1 = 0;
@@ -59,69 +50,31 @@ BoardState::BoardState(int *initialBoard) {
         }
     }
     if (this->movesPlayedCount % 2 == 0) {
-        this->activePlayerBoardHistory[movesPlayedCount] = board1;
-        this->opponentBoardHistory[movesPlayedCount] = board2;
+        this->activePlayerBoard = board1;
+        this->opponentBoard = board2;
     }
     else {
-        this->activePlayerBoardHistory[movesPlayedCount] = board2;
-        this->opponentBoardHistory[movesPlayedCount] = board1;
+        this->activePlayerBoard = board2;
+        this->opponentBoard = board1;
     }
-    this->activePlayerOpeningsHistory[movesPlayedCount] = openings(activePlayerBoardHistory[movesPlayedCount], opponentBoardHistory[movesPlayedCount]);
-    this->opponentOpeningsHistory[movesPlayedCount] = openings(opponentBoardHistory[movesPlayedCount], activePlayerBoardHistory[movesPlayedCount]);
+    this->activePlayerOpenings = openings(activePlayerBoard, opponentBoard);
+    this->opponentOpenings = openings(opponentBoard, activePlayerBoard);
 
     // Compute the possible Moves
-    uint64_t filled = activePlayerBoardHistory[movesPlayedCount] | opponentBoardHistory[movesPlayedCount];
+    uint64_t filled = activePlayerBoard | opponentBoard;
     //Flip the board, so shift inserts filled positions (marked by 0)
     filled = ~filled;
-    this->playableMovesHistory[movesPlayedCount] = filled ^ (filled << 16);
+    this->playableMoves = filled ^ (filled << 16);
 
     this->symmetricBoardsInitialized = false;
 }
 
-// BoardState::BoardState(BoardState &position, Move move) {
-//     //TODO either make sure that move is always legal or check here
-
-//     // First update openings of previous opponent
-//     this->activePlayerOpenings = position.opponentOpenings & (~(move.move));
-//     this->opponentOpenings = move.updatedPlayerOpenings;
-//     // Note that we do not need to subtract the current move here, because if it had been an opening, we would have won already
-//     /*this->opponentOpenings = position.activePlayerOpenings;
-//     // Add potential new openings for the player who just played
-//     for (int i = 0; i < openingUpdateMasks[getIDFromPoint(move.move)].maskCount; i++) {
-//         // First, check whether the opponent already has at least one stone of the line
-//         if (((position.opponentBoard) & (openingUpdateMasks[getIDFromPoint(move.move)].masks[i])) == 0) {
-//             // Check if there are two other stones on this line already, creating an opening
-//             // (note that we cannot have 3 stones there, otherwise this current stone would have won
-//             uint64_t currPotentialOpeningStones = (position.activePlayerBoard) & (openingUpdateMasks[getIDFromPoint(move.move)].masks[i]);
-//             if (((currPotentialOpeningStones - 1) & currPotentialOpeningStones) != 0) {
-//                 // Get the actual opening and add it to the mask
-//                 this->opponentOpenings |= currPotentialOpeningStones ^ (openingUpdateMasks[getIDFromPoint(move.move)].masks[i]);
-//             }
-//         }
-
-//     }
-//     if (this->opponentOpenings != move.updatedPlayerOpenings) {
-//         throw "Error";
-//     }*/
-
-//     this->activePlayerBoard = position.opponentBoard;
-//     this->opponentBoard = position.activePlayerBoard | move.move;
-//     this->movesPlayedCount = position.movesPlayedCount + 1;
-//     this->symmetricBoardsInitialized = false;
-
-//     // Compute the possible Moves
-//     uint64_t filled = activePlayerBoard | opponentBoard;
-//     //Flip the board, so shift inserts filled positions (marked by 0)
-//     filled = ~filled;
-//     this->playableMoves = filled ^ (filled << 16);
-// }
-
-void BoardState::MakeMove(Move move) {
+BoardState::BoardState(BoardState &position, Move move) {
     //TODO either make sure that move is always legal or check here
 
     // First update openings of previous opponent
-    this->activePlayerOpeningsHistory[movesPlayedCount + 1] = opponentOpeningsHistory[movesPlayedCount] & (~(move.move));
-    this->opponentOpeningsHistory[movesPlayedCount + 1] = move.updatedPlayerOpenings;
+    this->activePlayerOpenings = position.opponentOpenings & (~(move.move));
+    this->opponentOpenings = move.updatedPlayerOpenings;
     // Note that we do not need to subtract the current move here, because if it had been an opening, we would have won already
     /*this->opponentOpenings = position.activePlayerOpenings;
     // Add potential new openings for the player who just played
@@ -142,24 +95,20 @@ void BoardState::MakeMove(Move move) {
         throw "Error";
     }*/
 
-    this->activePlayerBoardHistory[movesPlayedCount + 1] = opponentBoardHistory[movesPlayedCount];
-    this->opponentBoardHistory[movesPlayedCount + 1] = activePlayerBoardHistory[movesPlayedCount] | move.move;
-    this->movesPlayedCount = movesPlayedCount + 1;
+    this->activePlayerBoard = position.opponentBoard;
+    this->opponentBoard = position.activePlayerBoard | move.move;
+    this->movesPlayedCount = position.movesPlayedCount + 1;
     this->symmetricBoardsInitialized = false;
 
     // Compute the possible Moves
-    uint64_t filled = activePlayerBoardHistory[movesPlayedCount] | opponentBoardHistory[movesPlayedCount];
+    uint64_t filled = activePlayerBoard | opponentBoard;
     //Flip the board, so shift inserts filled positions (marked by 0)
     filled = ~filled;
-    this->playableMovesHistory[movesPlayedCount] = filled ^ (filled << 16);
-}
-
-void BoardState::UndoMove() {
-    movesPlayedCount--;
+    this->playableMoves = filled ^ (filled << 16);
 }
 
 bool BoardState::canWin() {
-    return ((playableMovesHistory[movesPlayedCount] & activePlayerOpeningsHistory[movesPlayedCount]) != uint64_t(0));
+    return ((playableMoves & activePlayerOpenings) != uint64_t(0));
 }
 
 bool BoardState::willDrawUnlessWin() {
@@ -373,8 +322,8 @@ MoveOrdering BoardState::getMoves() {
     // Assume that we already checked that we cannot win immediately beforehand
 
     // Compute opponents openings to see whether we have to make a certain move in order to block opponent's win
-    uint64_t oppOpenings = opponentOpeningsHistory[movesPlayedCount];
-    uint64_t oppPlayableOpenings = oppOpenings & playableMovesHistory[movesPlayedCount];
+    uint64_t oppOpenings = opponentOpenings;
+    uint64_t oppPlayableOpenings = oppOpenings & playableMoves;
     if (oppPlayableOpenings != 0) {
         if ((((oppPlayableOpenings - 1) & oppPlayableOpenings) != 0) || (((oppPlayableOpenings << 16) & oppOpenings) != 0)) {
             // In this case the opponent either has more than one playable opening or the only opening is below another opening
@@ -387,63 +336,41 @@ MoveOrdering BoardState::getMoves() {
     }
     else {
         for (uint8_t i = 0; i < 16; ++i) {
-            // std::bitset<64> y(playableMovesHistory[movesPlayedCount]);
-            // std::cout << "playable  " << y << std::endl;
-            // std::bitset<64> z((uint64_t(0b0000000000000001000000000000000100000000000000010000000000000001) << i));
-            // std::cout << "column    " << z << std::endl;
-            uint64_t currMove = playableMovesHistory[movesPlayedCount] & (uint64_t(0b0000000000000001000000000000000100000000000000010000000000000001) << i);
+            uint64_t currMove = playableMoves & (uint64_t(0b0000000000000001000000000000000100000000000000010000000000000001) << i);
             if ((currMove != 0) && ((currMove << 16) & oppOpenings) == 0) {
-                // std::bitset<64> x(currMove);
-                // std::cout << "curmove   " << x << std::endl;
                 moves.moves[moves.moveCount].move = currMove;
                 moves.moveCount++;
             }
         }
     }
 
-    // std::cout << "no immediate wins" << std::endl;
-
-    // std::cout << moves.moveCount << "moves" << std::endl;
     for (int i = 0; i < moves.moveCount; i++) {
-        // std::cout << "loop 1 start " << i << std::endl;
-        moves.moves[i].updatedPlayerOpenings = activePlayerOpeningsHistory[movesPlayedCount];
-        // std::cout << "set updateopen " << std::endl;
+        moves.moves[i].updatedPlayerOpenings = activePlayerOpenings;
         moves.moves[i].score = 0;
 
         unsigned currID = getIDFromPoint(moves.moves[i].move);
-        // std::cout << "got id " << std::endl;
         for (int j = 0; j < openingUpdateMasks[currID].maskCount; j++) {
-            // std::cout << "loop 2 start " << j << std::endl;
             // First, check whether the opponent already has at least one stone of the line
-            if ((opponentBoardHistory[movesPlayedCount] & (openingUpdateMasks[currID].masks[j])) == 0) {
-                // std::cout << "if 1 true " << std::endl;
+            if ((opponentBoard & (openingUpdateMasks[currID].masks[j])) == 0) {
                 moves.moves[i].score += SCORE_WEIGHT_WIN_DIRECTION_POSSIBLE;
-                // std::cout << "added score " << std::endl;
                 // Check if there are two other stones on this line already, creating an opening
                 // (note that we cannot have 3 stones there, otherwise this current stone would have won)
-                uint64_t currPotentialOpeningStones = activePlayerBoardHistory[movesPlayedCount] & (openingUpdateMasks[currID].masks[j]);
-                // std::cout << "got currposopen " << std::endl;
+                uint64_t currPotentialOpeningStones = activePlayerBoard & (openingUpdateMasks[currID].masks[j]);
                 if (((currPotentialOpeningStones - 1) & currPotentialOpeningStones) != 0) {
-                    // std::cout << "if 2 true " << std::endl;
                     uint64_t createdOpening = currPotentialOpeningStones ^ (openingUpdateMasks[currID].masks[j]);
-                    // std::cout << "got creatop " << std::endl;
                     // Check whether the opening is immediately playable and add the corresponding weight
                     // Note that the second check is necessary because playableMoves does not take the current move into account, which might enable the immediate opening move
-                    if ((createdOpening & playableMovesHistory[movesPlayedCount]) != 0 || (((moves.moves[i].move) << 16) & createdOpening) != 0) {
-                        // std::cout << "if 3 true " << std::endl;
+                    if ((createdOpening & playableMoves) != 0 || (((moves.moves[i].move) << 16) & createdOpening) != 0) {
                         moves.moves[i].score += SCORE_WEIGHT_PLAYABLE_OPENING_CREATED;
                     }
                     else {
-                        // std::cout << "if 3 false " << std::endl;
                         moves.moves[i].score += SCORE_WEIGHT_FUTURE_OPENING_CREATED;
                     }
                     // Get the actual opening and add it to the mask
                     moves.moves[i].updatedPlayerOpenings |= createdOpening;
-                    // std::cout << "updateope " << std::endl;
                 }
             }
 
-            // std::cout << "loop 2 end " << j << std::endl;
         }
 #ifdef COMPUTE_DETAILED_SCORES
         // Check the value of the current move for the opponent (since we would be blocking it)
@@ -492,10 +419,8 @@ MoveOrdering BoardState::getMoves() {
         }
 #endif
 #endif
-        // std::cout << "loop 1 end " << i << std::endl;
     }
 
-    // std::cout << "scored moves" << std::endl;
 #ifndef NO_MOVE_SORTING
 #ifdef USE_SORTING_NETWORK
     // Sort the moves using Green's sorting network for 16 values
@@ -542,8 +467,6 @@ MoveOrdering BoardState::getMoves() {
     conditionalSwap(moves, 8, 9);
 
 #else
-
-    // std::cout << "sorting" << std::endl;
     // Sort the moves via insertion sort
     for (int i = 0; i < moves.moveCount; i++) {
         Move tmpMove = moves.moves[i];
@@ -556,7 +479,6 @@ MoveOrdering BoardState::getMoves() {
 #endif
 #endif
 
-    // std::cout << "returning" << std::endl;
     return moves;
 }
 
@@ -590,11 +512,11 @@ std::string BoardState::printBB(uint64_t board){
 
 std::string BoardState::printCompleteBoardState() {
     std::string bbString = "";
-    uint64_t  board1 = activePlayerBoardHistory[movesPlayedCount];
-    uint64_t board2 = opponentBoardHistory[movesPlayedCount];
+    uint64_t  board1 = activePlayerBoard;
+    uint64_t board2 = opponentBoard;
     if ((movesPlayedCount % 2) == 1) {
-        board1 = opponentBoardHistory[movesPlayedCount];
-        board2 = activePlayerBoardHistory[movesPlayedCount];
+        board1 = opponentBoard;
+        board2 = activePlayerBoard;
     }
     for (unsigned y = 0; y < 4; y++) {
         for (unsigned z = 0; z < 4; z++) {
@@ -831,9 +753,7 @@ unsigned BoardState::getIDFromPoint(uint64_t point) {
         case uint64_t(0b1000000000000000000000000000000000000000000000000000000000000000) :
             return 63;
 
-        default: 
-            // std::cout << "error" << std::endl;
-            throw("Function getIDFromPoint was called on a value that is not a point.");
+        default: throw("Function getIDFromPoint was called on a value that is not a point.");
     }
 }
 
@@ -847,7 +767,7 @@ inline void BoardState::conditionalSwap(MoveOrdering &moves, unsigned first, uns
 
 void BoardState::initializeSymmetricBoards() {
     if (!symmetricBoardsInitialized) {
-        symmetricBoards[Symmetry::IDENTITY] = CompactBoardState(activePlayerBoardHistory[movesPlayedCount], opponentBoardHistory[movesPlayedCount]);
+        symmetricBoards[Symmetry::IDENTITY] = CompactBoardState(activePlayerBoard, opponentBoard);
         tableKey = symmetricBoards[Symmetry::IDENTITY];
         for (int symmetryID = 0; symmetryID < 7; symmetryID++) {
             symmetricBoards[symmetryID] = CompactBoardState();
