@@ -73,6 +73,7 @@ public:
     static int preset1[64];
     static int preset2[64];
     static int preset3[64];
+    static int preset4[64];
 
     static int presetPlayed0_18[64];
     static int presetPlayed0_20[64];

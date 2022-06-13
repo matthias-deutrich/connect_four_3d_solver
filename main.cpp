@@ -8,7 +8,7 @@ int main() {
     std::cout << "Initialization complete. Starting Computation." << std::endl;
     clock_t time;
     time = clock();
-    int result = Game::computeGameValue(Game::presetPlayed2_18);
+    int result = Game::computeGameValue(Game::preset4);
     //int result = Game::computeEmptyGameValue();
     double computationTime = (clock() - time) / (double) CLOCKS_PER_SEC;
     double timePerIteration = computationTime / Game::iterationCount;
