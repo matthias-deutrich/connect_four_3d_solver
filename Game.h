@@ -12,7 +12,7 @@
 //#define WITHOUT_TRANSPOSITION_TABLE
 
 // Choose here whether to terminate the game at a specified depth
-//#define TERMINATE_AT_CERTAIN_DEPTH
+// #define TERMINATE_AT_CERTAIN_DEPTH
 
 //#define LIMIT_PLAYER_MOVES
 
@@ -73,6 +73,7 @@ public:
     static int preset1[64];
     static int preset2[64];
     static int preset3[64];
+    static int preset4[64];
 
     static int presetPlayed0_18[64];
     static int presetPlayed0_20[64];

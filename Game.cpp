@@ -68,6 +68,28 @@ int Game::preset3[64] = {1, 1, 0, 2, 1, 1, 2, 1,
                          2, 0, 0, 0, 0, 0, 0, 0,
                          0, 0, 0, 0, 0, 0, 0, 0};
 
+int Game::preset4[64] = {
+    1, 1, 0, 0,
+    0, 2, 0, 0,
+    0, 0, 2, 0,
+    0, 2, 0, 2,
+    
+    1, 1, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    
+    1, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    
+    2, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0
+};
+
 //Stats: Computation complete. Result is -1. Computed in 236.504 seconds using 747492067 iterations. Time per iteration: 3.16397e-07      K pos/s: 3160.59
 // ID 3
 int Game::presetPlayed0_18[64] = {2, 0, 0, 1, 1, 1, 2, 2,
