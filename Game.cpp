@@ -101,7 +101,7 @@ int Game::presetPlayed0_18[64] = {2, 0, 0, 1, 1, 1, 2, 2,
                                   0, 0, 0, 0, 0, 0, 0, 0,
                                   0, 0, 0, 0, 0, 0, 0, 0};
 
-//Stats: Computation complete. Result is -1. Computed in 2.828 seconds using 9381899 iterations.
+//Stats: Computation complete. Result is -1. Computed in 2.828 seconds using 9381899 iterations. 8698257.
 int Game::presetPlayed0_20[64] = {2, 0, 0, 1, 1, 1, 2, 2,
                                   2, 1, 1, 1, 2, 2, 0, 1,
                                   0, 0, 0, 0, 0, 2, 2, 1,
