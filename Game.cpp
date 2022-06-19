@@ -5,6 +5,7 @@
 
 
 #include "Game.h"
+// #include <iostream>
 
 
 
@@ -131,14 +132,26 @@ int Game::presetPlayed1_20[64] = {2, 2, 1, 2, 0, 2, 2, 0,
                                   0, 0, 0, 0, 0, 0, 0, 0};
 
 //Stats: Computation complete. Result is -1. Computed in 69.578 seconds using 217215817 iterations. Time per iteration: 3.20317e-07      K pos/s: 3121.9
-int Game::presetPlayed2_18[64] = {2, 0, 0, 0, 1, 1, 1, 2,
-                                  0, 2, 1, 0, 2, 1, 2, 1,
-                                  0, 0, 0, 0, 0, 0, 2, 0,
-                                  0, 2, 0, 0, 1, 2, 1, 1,
-                                  0, 0, 0, 0, 0, 0, 2, 0,
-                                  0, 0, 0, 0, 0, 0, 0, 0,
-                                  0, 0, 0, 0, 0, 0, 0, 0,
-                                  0, 0, 0, 0, 0, 0, 0, 0};
+int Game::presetPlayed2_18[64] = {
+                                  2, 0, 0, 0, 
+                                  1, 1, 1, 2,
+                                  0, 2, 1, 0, 
+                                  2, 1, 2, 1,
+
+                                  0, 0, 0, 0, 
+                                  0, 0, 2, 0,
+                                  0, 2, 0, 0, 
+                                  1, 2, 1, 1,
+
+                                  0, 0, 0, 0, 
+                                  0, 0, 2, 0,
+                                  0, 0, 0, 0, 
+                                  0, 0, 0, 0,
+
+                                  0, 0, 0, 0, 
+                                  0, 0, 0, 0,
+                                  0, 0, 0, 0, 
+                                  0, 0, 0, 0};
 
 int Game::presetPlayed2_20[64] = {2, 0, 0, 2, 1, 1, 1, 2,
                                   0, 2, 1, 0, 2, 1, 2, 1,
@@ -341,6 +354,7 @@ int Game::computeGameValue(int *initialBoard) {
 
 int Game::negaMax(BoardState &position, bool lowerBound, bool upperBound) {
     iterationCount++;
+    // std::cout << "Negamax" << std::endl;
 
 #ifdef FULL_DEBUG_OUTPUT
 #ifdef PRINT_BB
@@ -350,12 +364,14 @@ int Game::negaMax(BoardState &position, bool lowerBound, bool upperBound) {
 #endif
 
     if (position.canWin()) {
+    // std::cout << "can win" << std::endl;
 #ifdef FULL_DEBUG_OUTPUT
         std::cout << "Position at depth " << std::to_string(position.movesPlayedCount) << " can win immediately." << std::endl;
 #endif
         return 1;
     }
     if (position.willDrawUnlessWin()) {
+    // std::cout << "will draw" << std::endl;
 #ifdef FULL_DEBUG_OUTPUT
         std::cout << "Position at depth " << std::to_string(position.movesPlayedCount) << " cannot win and will draw." << std::endl;
 #endif
@@ -368,7 +384,8 @@ int Game::negaMax(BoardState &position, bool lowerBound, bool upperBound) {
         return terminationValue;
     }
 #endif
-
+    
+    // std::cout << "checking transposition" << std::endl;
     //Check for value in transposition table
 #ifndef WITHOUT_TRANSPOSITION_TABLE
     if (transpositionTable[position.getTableKey().hashKey(TABLESIZE)].value != INVALID
@@ -419,8 +436,10 @@ int Game::negaMax(BoardState &position, bool lowerBound, bool upperBound) {
     std::cout << "Position at depth " << std::to_string(position.movesPlayedCount) << " cannot compute immediately and will call children (Lowerbound: " << lowerBound << ", Upperbound: " << upperBound << ")." << std::endl;
 #endif
 
+    // std::cout << "getting moves" << std::endl;
     MoveOrdering moves = position.getMoves();
-
+    
+    // std::cout << "got moves" << std::endl;
 #ifdef LIMIT_PLAYER_MOVES
     // Check whose turn it is
     if (position.movesPlayedCount % 2 == 0) {
@@ -438,8 +457,14 @@ int Game::negaMax(BoardState &position, bool lowerBound, bool upperBound) {
 
     int value = -1;
     for (int i = 0; i < moves.moveCount; i++) {
-        BoardState boardAfterMove(position, moves.moves[i]);
-        int currVal = -negaMax(boardAfterMove, upperBound, lowerBound);
+
+        // BoardState boardAfterMove(position, moves.moves[i]);
+        // std::cout << "working" << std::endl;
+        position.MakeMove(moves.moves[i]);
+        int currVal = -negaMax(position, upperBound, lowerBound);
+        // std::cout << "still working1" << std::endl;
+        position.UndoMove();
+        // std::cout << "still working" << std::endl;
         //TODO save to table, be careful to remember the difference between boards with value of exactly 0 (all following moves were computed) and at least/most 0 (pruned)
         if (currVal == 1) {
 #ifdef FULL_DEBUG_OUTPUT
