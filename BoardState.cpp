@@ -449,11 +449,11 @@ MoveOrdering BoardState::getMoves() {
         // Check the value of the current move for the opponent (since we would be blocking it)
         for (int j = 0; j < openingUpdateMasks[currID].maskCount; j++) {
             // First, check whether the active player already has at least one stone of the line
-            if ((activePlayerBoard & (openingUpdateMasks[currID].masks[j])) == 0) {
+            if ((activePlayerBoardHistory[movesPlayedCount] & (openingUpdateMasks[currID].masks[j])) == 0) {
                 moves.moves[i].score += SCORE_WEIGHT_BLOCKED_WIN_DIRECTION_POSSIBLE;
                 // Check if there are two other stones on this line already, creating an opening
                 // (note that we cannot have 3 stones there, otherwise this current stone would be an opponent's opening and this move would be forced)
-                uint64_t currPotentialOpeningStones = opponentBoard & (openingUpdateMasks[currID].masks[j]);
+                uint64_t currPotentialOpeningStones = opponentBoardHistory[movesPlayedCount] & (openingUpdateMasks[currID].masks[j]);
                 if (((currPotentialOpeningStones - 1) & currPotentialOpeningStones) != 0) {
                     moves.moves[i].score += SCORE_WEIGHT_BLOCKED_OPENING_CREATED;
                 }
@@ -466,11 +466,11 @@ MoveOrdering BoardState::getMoves() {
             // Check the value of the current move for the opponent (since we would be blocking it)
             for (int j = 0; j < openingUpdateMasks[currID].maskCount; j++) {
                 // First, check whether the active player already has at least one stone of the line
-                if ((activePlayerBoard & (openingUpdateMasks[currID].masks[j])) == 0) {
+                if ((activePlayerBoardHistory[movesPlayedCount] & (openingUpdateMasks[currID].masks[j])) == 0) {
                     moves.moves[i].score += SCORE_WEIGHT_ABOVE_OPPONENT_WIN_DIRECTION_POSSIBLE;
                     // Check if there are two other stones on this line already, creating an opening
                     // (note that we cannot have 3 stones there, otherwise this current stone would enable an opponent's opening and this move would be prevented)
-                    uint64_t currPotentialOpeningStones = opponentBoard & (openingUpdateMasks[currID].masks[j]);
+                    uint64_t currPotentialOpeningStones = opponentBoardHistory[movesPlayedCount] & (openingUpdateMasks[currID].masks[j]);
                     if (((currPotentialOpeningStones - 1) & currPotentialOpeningStones) != 0) {
                         moves.moves[i].score += SCORE_WEIGHT_ABOVE_OPPONENT_OPENING_CREATED;
                     }
@@ -479,10 +479,10 @@ MoveOrdering BoardState::getMoves() {
             }
             for (int j = 0; j < openingUpdateMasks[currID].maskCount; j++) {
                 // First, check whether the opponent already has at least one stone of the line
-                if ((opponentBoard & (openingUpdateMasks[currID].masks[j])) == 0) {
+                if ((opponentBoardHistory[movesPlayedCount] & (openingUpdateMasks[currID].masks[j])) == 0) {
                     moves.moves[i].score += SCORE_WEIGHT_ABOVE_OWN_WIN_DIRECTION_POSSIBLE;
                     // Check if there are two other stones on this line already, creating an opening
-                    uint64_t currPotentialOpeningStones = activePlayerBoard & (openingUpdateMasks[currID].masks[j]);
+                    uint64_t currPotentialOpeningStones = activePlayerBoardHistory[movesPlayedCount] & (openingUpdateMasks[currID].masks[j]);
                     if (((currPotentialOpeningStones - 1) & currPotentialOpeningStones) != 0) {
                         moves.moves[i].score += SCORE_WEIGHT_ABOVE_OWN_OPENING_CREATED;
                     }
