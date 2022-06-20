@@ -563,14 +563,14 @@ MoveOrdering BoardState::getMoves() {
 //TODO include symmetry here, also save the key upon first computation and always return the result afterwards
 #ifdef NO_SYMMETRY_USAGE
 CompactBoardState BoardState::getTableKey() {
-    return CompactBoardState(this->activePlayerBoard, this->opponentBoard);
+    return CompactBoardState(this->activePlayerBoardHistory[movesPlayedCount], this->opponentBoardHistory[movesPlayedCount]);
 }
 #else
 CompactBoardState BoardState::getTableKey() {
     if (!symmetricBoardsInitialized) {
         initializeSymmetricBoards();
     }
-    return tableKey;
+    return tableKey[movesPlayedCount];
 }
 #endif
 
@@ -848,7 +848,7 @@ inline void BoardState::conditionalSwap(MoveOrdering &moves, unsigned first, uns
 void BoardState::initializeSymmetricBoards() {
     if (!symmetricBoardsInitialized) {
         symmetricBoards[Symmetry::IDENTITY] = CompactBoardState(activePlayerBoardHistory[movesPlayedCount], opponentBoardHistory[movesPlayedCount]);
-        tableKey = symmetricBoards[Symmetry::IDENTITY];
+        tableKey[movesPlayedCount] = symmetricBoards[Symmetry::IDENTITY];
         for (int symmetryID = 0; symmetryID < 7; symmetryID++) {
             symmetricBoards[symmetryID] = CompactBoardState();
             for (unsigned layer = 0; layer < 4; layer++) {
@@ -861,9 +861,9 @@ void BoardState::initializeSymmetricBoards() {
                     ][symmetryID])) << layer * 16;
             }
             symmetricBoards[symmetryID].topLayer = symmetryLookupTables[symmetricBoards[Symmetry::IDENTITY].topLayer][symmetryID];
-            if ((symmetricBoards[symmetryID].mainBoard < tableKey.mainBoard)
-                || ((symmetricBoards[symmetryID].mainBoard == tableKey.mainBoard) && (symmetricBoards[symmetryID].topLayer < tableKey.topLayer))) {
-                tableKey = symmetricBoards[symmetryID];
+            if ((symmetricBoards[symmetryID].mainBoard < tableKey[movesPlayedCount].mainBoard)
+                || ((symmetricBoards[symmetryID].mainBoard == tableKey[movesPlayedCount].mainBoard) && (symmetricBoards[symmetryID].topLayer < tableKey[movesPlayedCount].topLayer))) {
+                tableKey[movesPlayedCount] = symmetricBoards[symmetryID];
             }
         }
     }

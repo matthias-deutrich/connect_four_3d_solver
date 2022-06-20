@@ -17,7 +17,7 @@
 //#define USE_ENABLED_MOVE_FOR_SCORES
 #endif
 
-//#define NO_SYMMETRY_USAGE
+#define NO_SYMMETRY_USAGE
 
 #include <cstdint>
 #include <array>
@@ -129,7 +129,7 @@ public:
     static uint8_t movesPlayedCount;
 
     CompactBoardState symmetricBoards[8];
-    CompactBoardState tableKey;
+    CompactBoardState tableKey[64];
     bool symmetricBoardsInitialized;
 
     explicit BoardState(int* initialBoard);

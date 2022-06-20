@@ -5,7 +5,8 @@
 
 
 #include "Game.h"
-// #include <iostream>
+#include <iostream>
+#include <bitset>
 
 
 
@@ -103,14 +104,26 @@ int Game::presetPlayed0_18[64] = {2, 0, 0, 1, 1, 1, 2, 2,
                                   0, 0, 0, 0, 0, 0, 0, 0};
 
 //Stats: Computation complete. Result is -1. Computed in 2.828 seconds using 9381899 iterations. 8698257.
-int Game::presetPlayed0_20[64] = {2, 0, 0, 1, 1, 1, 2, 2,
-                                  2, 1, 1, 1, 2, 2, 0, 1,
-                                  0, 0, 0, 0, 0, 2, 2, 1,
-                                  0, 0, 2, 0, 0, 0, 0, 0,
-                                  0, 0, 0, 0, 0, 1, 2, 0,
-                                  0, 0, 1, 0, 0, 0, 0, 0,
-                                  0, 0, 0, 0, 0, 0, 0, 0,
-                                  0, 0, 0, 0, 0, 0, 0, 0};
+int Game::presetPlayed0_20[64] = {
+    2, 0, 0, 1, 
+    1, 1, 2, 2,
+    2, 1, 1, 1, 
+    2, 2, 0, 1,
+
+    0, 0, 0, 0, 
+    0, 2, 2, 1,
+    0, 0, 2, 0, 
+    0, 0, 0, 0,
+
+    0, 0, 0, 0, 
+    0, 1, 2, 0,
+    0, 0, 1, 0, 
+    0, 0, 0, 0,
+
+    0, 0, 0, 0, 
+    0, 0, 0, 0,
+    0, 0, 0, 0, 
+    0, 0, 0, 0};
 
 //Stats: Computation complete. Result is 1. Computed in 0 seconds using 10 iterations. Time per iteration: 0      K pos/s: inf
 int Game::presetPlayed1_18[64] = {2, 2, 1, 2, 0, 2, 2, 0,
@@ -354,6 +367,9 @@ int Game::computeGameValue(int *initialBoard) {
 
 int Game::negaMax(BoardState &position, bool lowerBound, bool upperBound) {
     iterationCount++;
+    // if (iterationCount % 1000000 == 0) std::cout << iterationCount << std::endl;
+    // if (iterationCount % 100000 == 0) std::cout << unsigned(position.movesPlayedCount) << std::endl;
+    // if (position.movesPlayedCount == 63) std::cout << "will end in draw" << std::endl;
     // std::cout << "Negamax" << std::endl;
 
 #ifdef FULL_DEBUG_OUTPUT
@@ -388,10 +404,11 @@ int Game::negaMax(BoardState &position, bool lowerBound, bool upperBound) {
     // std::cout << "checking transposition" << std::endl;
     //Check for value in transposition table
 #ifndef WITHOUT_TRANSPOSITION_TABLE
-    if (transpositionTable[position.getTableKey().hashKey(TABLESIZE)].value != INVALID
-        && position.getTableKey() == transpositionTable[position.getTableKey().hashKey(TABLESIZE)].board) {
+    CompactBoardState tableKey = position.getTableKey();
+    if (transpositionTable[tableKey.hashKey(TABLESIZE)].value != INVALID
+        && tableKey == transpositionTable[tableKey.hashKey(TABLESIZE)].board) {
 
-        switch (transpositionTable[position.getTableKey().hashKey(TABLESIZE)].value) {
+        switch (transpositionTable[tableKey.hashKey(TABLESIZE)].value) {
             case LOSS :
 #ifdef FULL_DEBUG_OUTPUT
                 std::cout << "Found position at depth " << std::to_string(position.movesPlayedCount) << " in table, result is LOSS." << std::endl;
@@ -426,7 +443,7 @@ int Game::negaMax(BoardState &position, bool lowerBound, bool upperBound) {
         }
     }
 #ifdef FULL_DEBUG_OUTPUT
-    else if (transpositionTable[position.getTableKey().hashKey(TABLESIZE)].value != INVALID) {
+    else if (transpositionTable[tableKey.hashKey(TABLESIZE)].value != INVALID) {
         std::cout << "Different doard with same hashkey as position at depth " << std::to_string(position.movesPlayedCount) << " was found." << std::endl;
     }
 #endif
@@ -457,20 +474,33 @@ int Game::negaMax(BoardState &position, bool lowerBound, bool upperBound) {
 
     int value = -1;
     for (int i = 0; i < moves.moveCount; i++) {
-
         // BoardState boardAfterMove(position, moves.moves[i]);
         // std::cout << "working" << std::endl;
+        // std::cout << "  active player board: " << std::bitset<64> (position.activePlayerBoardHistory[position.movesPlayedCount]) << std::endl;
+        // std::cout << "inactive player board: " << std::bitset<64> (position.opponentBoardHistory[position.movesPlayedCount]) << std::endl;
+        // std::cout << "                 move: " << std::bitset<64> (moves.moves[i].move) << std::endl;
+        // std::cout << "     movesPlayedCount: " << unsigned(position.movesPlayedCount) << std::endl;
         position.MakeMove(moves.moves[i]);
+        // std::cout << "     movesPlayedCount: " << unsigned(position.movesPlayedCount) << std::endl;
+
+        // std::cout << "  active player board: " << std::bitset<64> (position.activePlayerBoardHistory[position.movesPlayedCount]) << std::endl;
+        // std::cout << "inactive player board: " << std::bitset<64> (position.opponentBoardHistory[position.movesPlayedCount]) << std::endl;
         int currVal = -negaMax(position, upperBound, lowerBound);
-        // std::cout << "still working1" << std::endl;
+        // std::cout << "  active player board: " << std::bitset<64> (position.activePlayerBoardHistory[position.movesPlayedCount]) << std::endl;
+        // std::cout << "inactive player board: " << std::bitset<64> (position.opponentBoardHistory[position.movesPlayedCount]) << std::endl;
+        // // std::cout << "still working1" << std::endl;
+        // std::cout << "     movesPlayedCount: " << unsigned(position.movesPlayedCount) << std::endl;
         position.UndoMove();
+        // std::cout << "     movesPlayedCount: " << unsigned(position.movesPlayedCount) << std::endl;
+        // std::cout << "  active player board: " << std::bitset<64> (position.activePlayerBoardHistory[position.movesPlayedCount]) << std::endl;
+        // std::cout << "inactive player board: " << std::bitset<64> (position.opponentBoardHistory[position.movesPlayedCount]) << std::endl;
         // std::cout << "still working" << std::endl;
         //TODO save to table, be careful to remember the difference between boards with value of exactly 0 (all following moves were computed) and at least/most 0 (pruned)
         if (currVal == 1) {
 #ifdef FULL_DEBUG_OUTPUT
             std::cout << "Position at depth " << std::to_string(position.movesPlayedCount) << " will win because a child will win." << std::endl;
 #endif
-            saveCompactBoardStateInTable(position.getTableKey(), TableGameValue::WIN);
+            saveCompactBoardStateInTable(tableKey, TableGameValue::WIN);
             return 1;
         }
         else if (currVal == 0) {
@@ -479,7 +509,7 @@ int Game::negaMax(BoardState &position, bool lowerBound, bool upperBound) {
 #ifdef FULL_DEBUG_OUTPUT
                 std::cout << "Position at depth " << std::to_string(position.movesPlayedCount) << " can force draw and is terminated because of upper bound." << std::endl;
 #endif
-                saveCompactBoardStateInTable(position.getTableKey(), TableGameValue::DRAW_OR_BETTER);
+                saveCompactBoardStateInTable(tableKey, TableGameValue::DRAW_OR_BETTER);
                 return 0;
             }
             else {
@@ -497,7 +527,7 @@ int Game::negaMax(BoardState &position, bool lowerBound, bool upperBound) {
     std::cout << "Position at depth " << std::to_string(position.movesPlayedCount) << " found value " << std::to_string(value) << " by computing all its children." << std::endl;
 #endif
 
-    saveCompactBoardStateInTable(position.getTableKey(), value == 0 ? TableGameValue::DRAW_GUARANTEED : TableGameValue::LOSS);
+    saveCompactBoardStateInTable(tableKey, value == 0 ? TableGameValue::DRAW_GUARANTEED : TableGameValue::LOSS);
     return value;
 }
 
