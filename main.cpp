@@ -8,7 +8,7 @@ int main() {
     std::cout << "Initialization complete. Starting Computation." << std::endl;
     clock_t time;
     time = clock();
-    int result = Game::computeGameValue(Game::presetPlayed2_18);
+    int result = Game::computeGameValue(Game::presetPlayed0_20);
     //int result = Game::computeEmptyGameValue();
     double computationTime = (clock() - time) / (double) CLOCKS_PER_SEC;
     double timePerIteration = computationTime / Game::iterationCount;
@@ -16,6 +16,16 @@ int main() {
     std::cout << "Computation complete. Result is " << result << ". Computed in " << computationTime << " seconds using " << Game::iterationCount << " iterations." << std::endl;
     std::cout << "Time per iteration: " << timePerIteration << "      K pos/s: " << kPosPerS << std::endl;
     std::cout << "Of the " << Game::TABLESIZE << " possible table entries, " << Game::tableFillCount() << " were used in the end." << std::endl;
+    std::cout << "Winning positions found " << Game::WinningPosition << std::endl;
+    std::cout << "Draw positions found " << Game::TrueDrawPosition << std::endl;
+    std::cout << "Loss positions found " << Game::LossPositionInTable << std::endl;
+    std::cout << "Draw positions found in table " << Game::DrawPositionInTable << std::endl;
+    std::cout << "Winning positions found in table " << Game::WinPositionInTable << std::endl;
+    std::cout << "Draw or better positions found in table " << Game::DrawOrBetterPositionInTable << std::endl;
+    std::cout << "forcing draw positions found " << Game::CanforceDraw << std::endl;
+    for (int const i: Game::WinMoves) {
+        std::cout << "Killer moves " << i << std::endl;
+    }
     system("pause");
 #ifdef TERMINATE_AT_CERTAIN_DEPTH
     std::cout << "Game was terminated at depth " << static_cast<int>(Game::terminationDepth) << " " << Game::terminationCount << " times." << std::endl;

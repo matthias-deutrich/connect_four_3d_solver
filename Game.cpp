@@ -11,6 +11,14 @@
 
 
 int Game::iterationCount = 0;
+int Game::WinningPosition = 0;
+int Game::TrueDrawPosition = 0;
+int Game::LossPositionInTable = 0;
+int Game::DrawPositionInTable = 0;
+int Game::WinPositionInTable = 0;
+int Game::DrawOrBetterPositionInTable = 0;
+int Game::CanforceDraw = 0;
+int Game::WinMoves[16] = {};
 
 #ifdef TERMINATE_AT_CERTAIN_DEPTH
 uint8_t Game::terminationDepth = 20;
@@ -380,6 +388,7 @@ int Game::negaMax(BoardState &position, bool lowerBound, bool upperBound) {
 #endif
 
     if (position.canWin()) {
+        WinningPosition++;
     // std::cout << "can win" << std::endl;
 #ifdef FULL_DEBUG_OUTPUT
         std::cout << "Position at depth " << std::to_string(position.movesPlayedCount) << " can win immediately." << std::endl;
@@ -387,6 +396,7 @@ int Game::negaMax(BoardState &position, bool lowerBound, bool upperBound) {
         return 1;
     }
     if (position.willDrawUnlessWin()) {
+        TrueDrawPosition++;
     // std::cout << "will draw" << std::endl;
 #ifdef FULL_DEBUG_OUTPUT
         std::cout << "Position at depth " << std::to_string(position.movesPlayedCount) << " cannot win and will draw." << std::endl;
@@ -410,21 +420,25 @@ int Game::negaMax(BoardState &position, bool lowerBound, bool upperBound) {
 
         switch (transpositionTable[tableKey.hashKey(TABLESIZE)].value) {
             case LOSS :
+                LossPositionInTable++;
 #ifdef FULL_DEBUG_OUTPUT
                 std::cout << "Found position at depth " << std::to_string(position.movesPlayedCount) << " in table, result is LOSS." << std::endl;
 #endif
                 return -1;
             case DRAW_GUARANTEED :
+                DrawPositionInTable++;
 #ifdef FULL_DEBUG_OUTPUT
                 std::cout << "Found position at depth " << std::to_string(position.movesPlayedCount) << " in table, result is DRAW_GUARANTEED." << std::endl;
 #endif
                 return 0;
             case WIN :
+                WinPositionInTable++;
 #ifdef FULL_DEBUG_OUTPUT
                 std::cout << "Found position at depth " << std::to_string(position.movesPlayedCount) << " in table, result is WIN." << std::endl;
 #endif
                 return 1;
             case DRAW_OR_BETTER :
+                DrawOrBetterPositionInTable++;
 #ifdef FULL_DEBUG_OUTPUT
                 std::cout << "Found position at depth " << std::to_string(position.movesPlayedCount) << " in table, result is DRAW_OR_BETTER." << std::endl;
 #endif
@@ -497,6 +511,7 @@ int Game::negaMax(BoardState &position, bool lowerBound, bool upperBound) {
         // std::cout << "still working" << std::endl;
         //TODO save to table, be careful to remember the difference between boards with value of exactly 0 (all following moves were computed) and at least/most 0 (pruned)
         if (currVal == 1) {
+            WinMoves[i]++;
 #ifdef FULL_DEBUG_OUTPUT
             std::cout << "Position at depth " << std::to_string(position.movesPlayedCount) << " will win because a child will win." << std::endl;
 #endif
@@ -504,6 +519,7 @@ int Game::negaMax(BoardState &position, bool lowerBound, bool upperBound) {
             return 1;
         }
         else if (currVal == 0) {
+            CanforceDraw++;
 #ifndef NO_PRUNING
             if (upperBound) {
 #ifdef FULL_DEBUG_OUTPUT

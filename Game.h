@@ -60,6 +60,14 @@ public:
 #endif
 
     static int iterationCount;
+    static int WinningPosition;
+    static int TrueDrawPosition;
+    static int LossPositionInTable;
+    static int DrawPositionInTable;
+    static int WinPositionInTable;
+    static int DrawOrBetterPositionInTable;
+    static int CanforceDraw;
+    static int WinMoves[16];
 
     static int computeEmptyGameValue();
     static int computeThreeLayerTestGameValue();
