@@ -6,8 +6,8 @@
 #define FIAR_3D_CPP_GAME_H
 
 //Determine here whether debug output should be on
-// #define FULL_DEBUG_OUTPUT
-// #define PRINT_BB
+#define FULL_DEBUG_OUTPUT
+#define PRINT_BB
 
 //#define WITHOUT_TRANSPOSITION_TABLE
 

@@ -73,6 +73,17 @@ struct Move {
     uint64_t move;
     uint64_t updatedPlayerOpenings;
     int score = -100000000;
+    bool valid;
+};
+
+struct MovesInLine {
+    int moveCount;
+    int moves[3];
+};
+
+struct LinesThroughMove {
+    int lineCount;
+    MovesInLine lines[7];
 };
 
 /**
@@ -106,6 +117,8 @@ public:
     static const int SCORE_WEIGHT_ABOVE_OWN_WIN_DIRECTION_POSSIBLE = 1;
     static const int SCORE_WEIGHT_ABOVE_OWN_OPENING_CREATED = 10;
 
+    static bool affected[64][64];
+
     static WinMasks openingUpdateMasks[64];
     static uint16_t symmetryLookupTables[65536][7];
     static unsigned shiftDirections[12];
@@ -126,6 +139,8 @@ public:
     static uint64_t activePlayerOpeningsHistory[64];
     static uint64_t opponentOpeningsHistory[64];
     static uint64_t playableMovesHistory[64];
+    static MoveOrdering moveOrderingHistory[64];
+    static uint64_t moveHistory[64];
     static uint8_t movesPlayedCount;
 
     CompactBoardState symmetricBoards[8];
@@ -141,6 +156,8 @@ public:
     bool canWin();
     bool willDrawUnlessWin();
     MoveOrdering getMoves();
+    void ScoreMoves(MoveOrdering moves);
+    void Score(Move move);
     void initializeSymmetricBoards();
     CompactBoardState getTableKey();
 

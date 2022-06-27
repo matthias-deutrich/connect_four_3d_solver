@@ -375,7 +375,8 @@ int Game::computeGameValue(int *initialBoard) {
 
 int Game::negaMax(BoardState &position, bool lowerBound, bool upperBound) {
     iterationCount++;
-    // if (iterationCount % 1000000 == 0) std::cout << iterationCount << std::endl;
+    // if (position.movesPlayedCount == 22) std::cout << iterationCount << std::endl;
+    if (iterationCount % 1000000 == 0) std::cout << iterationCount << std::endl;
     // if (iterationCount % 100000 == 0) std::cout << unsigned(position.movesPlayedCount) << std::endl;
     // if (position.movesPlayedCount == 63) std::cout << "will end in draw" << std::endl;
     // std::cout << "Negamax" << std::endl;

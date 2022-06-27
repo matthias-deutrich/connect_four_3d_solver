@@ -5,6 +5,26 @@
 int main() {
     std::cout << "Starting initialization." << std::endl;
     Game::initialize();
+    // std::cout << "   ";
+	// for (int col = 0; col < 64; col++) {
+    //     if (col < 10) std::cout << " " << col << " ";
+    //     else std::cout << col << " ";
+	// }
+	// std::cout << std::endl;
+	
+	// for (int row = 0; row < 64; row++) {
+    //     if (row < 10) std::cout << " " << row << " ";
+    //     else std::cout << " " << row;
+
+	// 	for (int col = 0; col < 64; col++) {
+
+	// 		if (BoardState::affected[row][col] == false) {
+	// 			std::cout << "   ";
+	// 		}
+	// 		else std::cout << " * ";
+	// 	}
+	// 	std::cout << std::endl;
+	// }
     std::cout << "Initialization complete. Starting Computation." << std::endl;
     clock_t time;
     time = clock();
