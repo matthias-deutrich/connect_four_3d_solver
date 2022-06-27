@@ -96,6 +96,7 @@ BoardState::BoardState(int *initialBoard) {
         else {
             moves.moves[i].valid = false;
         }
+        // std::cout << moves.moves[i].score << std::endl;
     }
     moves.moveCount = 16;
 
@@ -188,13 +189,13 @@ void BoardState::MakeMove(Move move) {
         if ((currMove != 0)) {
             moves.moves[moves.moveCount].move = currMove;
             moves.moves[moves.moveCount].score = 0;
+            move.updatedPlayerOpenings = activePlayerOpeningsHistory[movesPlayedCount];
             if (affected[getIDFromPoint(move.move)][getIDFromPoint(currMove)]) {
                 Score(moves.moves[moves.moveCount]);
             }
             else {
                 moves.moves[moves.moveCount].score = moveOrderingHistory[movesPlayedCount - 1].moves[moves.moveCount].score;
             }
-            move.updatedPlayerOpenings = activePlayerOpeningsHistory[movesPlayedCount];
             moves.moves[moves.moveCount].valid = true;
         }
         else {
@@ -672,7 +673,6 @@ MoveOrdering BoardState::getMoves() {
     //     }
     // }
 
-    moveOrderingHistory[movesPlayedCount] = moves;
     // std::cout << "scored moves" << std::endl;
 #ifndef NO_MOVE_SORTING
 #ifdef USE_SORTING_NETWORK
@@ -735,8 +735,8 @@ MoveOrdering BoardState::getMoves() {
 #endif
 
     for (int i = 0; i < moves.moveCount; ++i) {
-        std::cout << "move " << moves.moves[i].move << std::endl;
-        std::cout << "score " << moves.moves[i].score << std::endl;
+        // std::cout << "move " << moves.moves[i].move << std::endl;
+        // std::cout << "score " << moves.moves[i].score << std::endl;
     }
     // std::cout << "returning" << std::endl;
     return moves;
