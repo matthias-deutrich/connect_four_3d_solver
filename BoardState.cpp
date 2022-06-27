@@ -3,7 +3,7 @@
 //
 
 #include "BoardState.h"
-// #include <iostream>
+#include <iostream>
 // #include<bitset>
 
 WinMasks BoardState::openingUpdateMasks[64] = {};
@@ -90,7 +90,8 @@ BoardState::BoardState(int *initialBoard) {
     // A move is invalid if it will never be played in this game.
     for (uint8_t i = 0; i < 16; ++i) {
         uint64_t currMove = playableMovesHistory[movesPlayedCount] & (uint64_t(0b0000000000000001000000000000000100000000000000010000000000000001) << i);
-        if ((currMove != 0) && ((currMove << 16) & oppOpenings) == 0) {
+        moves.moves[i].score = 0;
+        if ((currMove != 0)) {
             moves.moves[i].move = currMove;
             moves.moves[i].valid = true;
             Score(moves.moves[i]);
@@ -104,17 +105,6 @@ BoardState::BoardState(int *initialBoard) {
     moveOrderingHistory[movesPlayedCount] = moves;
 
     this->symmetricBoardsInitialized = false;
-}
-
-void BoardState::ScoreMoves(MoveOrdering moves) {
-    for (int i = 0; i < moves.moveCount; i++) {
-        moves.moves[i].score = 0;
-
-        //dont score invalid moves
-        if (!moves.moves[i].valid) continue;
-
-        Score(moves.moves[i]);
-    }
 }
 
 // BoardState::BoardState(BoardState &position, Move move) {
@@ -196,12 +186,11 @@ void BoardState::MakeMove(Move move) {
 
     MoveOrdering moves = {};
 
-    uint64_t oppOpenings = opponentOpeningsHistory[movesPlayedCount];
-    uint64_t oppPlayableOpenings = oppOpenings & playableMovesHistory[movesPlayedCount];
     for (uint8_t i = 0; i < 16; ++i) {
         uint64_t currMove = playableMovesHistory[movesPlayedCount] & (uint64_t(0b0000000000000001000000000000000100000000000000010000000000000001) << i);
         if ((currMove != 0)) {
             moves.moves[moves.moveCount].move = currMove;
+            moves.moves[moves.moveCount].score = 0;
             if (affected[getIDFromPoint(move.move)][getIDFromPoint(currMove)]) {
                 Score(moves.moves[moves.moveCount]);
             }
@@ -221,7 +210,7 @@ void BoardState::MakeMove(Move move) {
     moveOrderingHistory[movesPlayedCount] = moves;
 }
 
-void BoardState::Score(Move move) {
+void BoardState::Score(Move &move) {
     unsigned currID = getIDFromPoint(move.move);
     for (int j = 0; j < openingUpdateMasks[currID].maskCount; j++) {
         // First, check whether the opponent already has at least one stone of the line
@@ -748,6 +737,10 @@ MoveOrdering BoardState::getMoves() {
 #endif
 #endif
 
+    for (int i = 0; i < moves.moveCount; ++i) {
+        std::cout << "move " << moves.moves[i].move << std::endl;
+        std::cout << "score " << moves.moves[i].score << std::endl;
+    }
     // std::cout << "returning" << std::endl;
     return moves;
 }

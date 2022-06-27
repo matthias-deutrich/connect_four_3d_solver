@@ -107,4 +107,32 @@ CMakeFiles/connect_four_3d_solver.dir/BoardState.cpp.obj: \
  c:\users\owen2\mingw\include\c++\11.2.0\bits\charconv.h \
  c:\users\owen2\mingw\include\c++\11.2.0\bits\functional_hash.h \
  c:\users\owen2\mingw\include\c++\11.2.0\bits\hash_bytes.h \
- c:\users\owen2\mingw\include\c++\11.2.0\bits\basic_string.tcc
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\basic_string.tcc \
+ c:\users\owen2\mingw\include\c++\11.2.0\iostream \
+ c:\users\owen2\mingw\include\c++\11.2.0\ostream \
+ c:\users\owen2\mingw\include\c++\11.2.0\ios \
+ c:\users\owen2\mingw\include\c++\11.2.0\exception \
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\exception_ptr.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\cxxabi_init_exception.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\typeinfo \
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\nested_exception.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\ios_base.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\locale_classes.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\locale_classes.tcc \
+ c:\users\owen2\mingw\include\c++\11.2.0\system_error \
+ c:\users\owen2\mingw\include\c++\11.2.0\x86_64-w64-mingw32\bits\error_constants.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\stdexcept \
+ c:\users\owen2\mingw\include\c++\11.2.0\streambuf \
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\streambuf.tcc \
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\basic_ios.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\locale_facets.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\cwctype \
+ c:\users\owen2\mingw\x86_64-w64-mingw32\include\wctype.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\x86_64-w64-mingw32\bits\ctype_base.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\streambuf_iterator.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\x86_64-w64-mingw32\bits\ctype_inline.h \
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\locale_facets.tcc \
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\basic_ios.tcc \
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\ostream.tcc \
+ c:\users\owen2\mingw\include\c++\11.2.0\istream \
+ c:\users\owen2\mingw\include\c++\11.2.0\bits\istream.tcc

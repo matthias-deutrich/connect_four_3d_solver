@@ -157,7 +157,7 @@ public:
     bool willDrawUnlessWin();
     MoveOrdering getMoves();
     void ScoreMoves(MoveOrdering moves);
-    void Score(Move move);
+    void Score(Move &move);
     void initializeSymmetricBoards();
     CompactBoardState getTableKey();
 
