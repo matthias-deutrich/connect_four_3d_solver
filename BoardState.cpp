@@ -83,9 +83,6 @@ BoardState::BoardState(int *initialBoard) {
     MoveOrdering moves = {};
     // Assume that we already checked that we cannot win immediately beforehand
 
-    // Compute opponents openings to see whether we have to make a certain move in order to block opponent's win
-    uint64_t oppOpenings = opponentOpeningsHistory[movesPlayedCount];
-
     //get the list of all moves and whether they are valid or not
     // A move is invalid if it will never be played in this game.
     for (uint8_t i = 0; i < 16; ++i) {
